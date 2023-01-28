@@ -36,5 +36,4 @@ public class Customer {
     private double assurance;
     @OneToMany(mappedBy = "customer")
     private List<Credit> credits;
-
 }
