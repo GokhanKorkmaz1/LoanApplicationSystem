@@ -4,6 +4,8 @@ import com.gokhankorkmaz.loanapplicationsystem.business.abstracts.CreditService;
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.requests.CreditRequest;
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.responses.CreditResponse;
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.responses.CustomerResponse;
+import com.gokhankorkmaz.loanapplicationsystem.business.rules.abstracts.CreditBusinessRules;
+import com.gokhankorkmaz.loanapplicationsystem.business.rules.abstracts.CustomerBusinessRules;
 import com.gokhankorkmaz.loanapplicationsystem.entities.Credit;
 import com.gokhankorkmaz.loanapplicationsystem.entities.Customer;
 import com.gokhankorkmaz.loanapplicationsystem.repositories.CreditRepository;
@@ -17,34 +19,34 @@ import java.sql.Date;
 @Service
 public class CreditManager implements CreditService {
     private final CreditRepository creditRepository;
+    private final CreditBusinessRules creditBusinessRules;
     private final CustomerRepository customerRepository;
+    private final CustomerBusinessRules customerBusinessRules;
     private final ModelMapperService modelMapperService;
 
     @Autowired
-    public CreditManager(CreditRepository creditRepository, CustomerRepository customerRepository, ModelMapperService modelMapperService) {
+    public CreditManager(CreditRepository creditRepository, CreditBusinessRules creditBusinessRules, CustomerRepository customerRepository, CustomerBusinessRules customerBusinessRules, ModelMapperService modelMapperService) {
         this.creditRepository = creditRepository;
+        this.creditBusinessRules = creditBusinessRules;
         this.customerRepository = customerRepository;
+        this.customerBusinessRules = customerBusinessRules;
         this.modelMapperService = modelMapperService;
     }
 
     @Override
     public CreditResponse add(CreditRequest creditRequest) {
-        // business rule
-        Customer customer = customerRepository.getById(creditRequest.getCustomerId());
-        Credit credit = Credit.builder().customer(customer).state(true).amount(customer.getMonthlyIncome()*5).build();
-        // credit.business rules
-        Credit creditResult = this.creditRepository.save(credit);
+        Customer customer = customerBusinessRules.ruleForCustomerExist(creditRequest.getCustomerId());
+        Credit credit = this.creditBusinessRules.CalculateCredit(customer);
+        Credit creditResult = this.creditRepository.saveAndFlush(credit);
         CreditResponse creditResponse = this.modelMapperService.forDto().map(creditResult, CreditResponse.class);
         return creditResponse;
     }
 
     @Override
     public CreditResponse getByIdentityNumberAndBirthdate(String identityNumber, Date birthdate) {
-        Customer customer = customerRepository.findByIdentityNumber(identityNumber);
-        // identity rule birthdate karşılaştırma iş kuralı obje amount ve state içermeli
+        Customer customer = this.customerBusinessRules.ruleForCustomerExist(identityNumber);
         CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);
-        Credit credit = this.creditRepository.getCreditByCustomer(customer);
-        // business -> bu sonuç var mı
+        Credit credit = this.creditBusinessRules.ruleForCreditExist(customer);
         CreditResponse creditResponse = CreditResponse.builder().customerResponse(customerResponse)
                 .id(credit.getId()).amount(credit.getAmount()).state(credit.isState()).build();
         return creditResponse;
