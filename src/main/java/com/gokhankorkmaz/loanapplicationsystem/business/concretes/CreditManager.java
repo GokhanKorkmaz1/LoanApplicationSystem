@@ -31,10 +31,10 @@ public class CreditManager implements CreditService {
     public CreditResponse add(CreditRequest creditRequest) {
         // business rule
         Customer customer = customerRepository.getById(creditRequest.getCustomerId());
-        Credit credit = new Credit();
+        Credit credit = Credit.builder().customer(customer).state(true).amount(customer.getMonthlyIncome()*5).build();
         // credit.business rules
-        this.creditRepository.save(credit);
-        CreditResponse creditResponse = this.modelMapperService.forDto().map(credit, CreditResponse.class);
+        Credit creditResult = this.creditRepository.save(credit);
+        CreditResponse creditResponse = this.modelMapperService.forDto().map(creditResult, CreditResponse.class);
         return creditResponse;
     }
 
@@ -46,7 +46,7 @@ public class CreditManager implements CreditService {
         Credit credit = this.creditRepository.getCreditByCustomer(customer);
         // business -> bu sonuç var mı
         CreditResponse creditResponse = CreditResponse.builder().customerResponse(customerResponse)
-                .amount(100.0).state(false).build();
+                .id(credit.getId()).amount(credit.getAmount()).state(credit.isState()).build();
         return creditResponse;
     }
 }
