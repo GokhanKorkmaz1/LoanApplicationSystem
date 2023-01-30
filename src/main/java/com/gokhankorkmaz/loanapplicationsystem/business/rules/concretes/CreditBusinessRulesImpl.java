@@ -27,10 +27,10 @@ public class CreditBusinessRulesImpl implements CreditBusinessRules {
     @Override
     public Credit ruleForCreditExist(Customer customer) {
         Customer resultCustomer = this.customerBusinessRules.ruleForCustomerExist(customer.getIdentityNumber());
-        if(customer.getIdentityNumber().compareTo(resultCustomer.getIdentityNumber()) != 0 || customer.getBirthdate().getTime() != resultCustomer.getBirthdate().getTime()){
-            throw new BusinessException("Credit not found for incompatibility");
+        if(customer.getIdentityNumber().compareTo(resultCustomer.getIdentityNumber()) != 0 || !customer.getBirthdate().equals(resultCustomer.getBirthdate())){
+            throw new BusinessException("Credit not found due to mismatch of identity number and birthdate");
         }
-        Credit credit = this.creditRepository.getCreditByCustomer(customer);
+        Credit credit = this.creditRepository.getCreditByCustomer(resultCustomer);
         if(credit == null){
             throw new BusinessException("Credit not found");
         }

@@ -46,7 +46,7 @@ public class CreditManager implements CreditService {
     public CreditResponse getByIdentityNumberAndBirthdate(String identityNumber, Date birthdate) {
         Customer customer = this.customerBusinessRules.ruleForCustomerExist(identityNumber);
         CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);
-        Credit credit = this.creditBusinessRules.ruleForCreditExist(customer);
+        Credit credit = this.creditBusinessRules.ruleForCreditExist(Customer.builder().identityNumber(identityNumber).birthdate(birthdate).build());
         CreditResponse creditResponse = CreditResponse.builder().customerResponse(customerResponse)
                 .id(credit.getId()).amount(credit.getAmount()).state(credit.isState()).build();
         return creditResponse;
