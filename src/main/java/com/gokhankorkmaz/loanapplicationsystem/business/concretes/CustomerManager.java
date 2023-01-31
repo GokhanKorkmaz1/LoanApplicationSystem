@@ -3,17 +3,18 @@ package com.gokhankorkmaz.loanapplicationsystem.business.concretes;
 import com.gokhankorkmaz.loanapplicationsystem.business.abstracts.CreditService;
 import com.gokhankorkmaz.loanapplicationsystem.business.abstracts.CustomerService;
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.requests.CreditRequest;
+import com.gokhankorkmaz.loanapplicationsystem.business.dtos.requests.CustomerAddRequest;
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.requests.CustomerRequest;
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.responses.CustomerResponse;
 import com.gokhankorkmaz.loanapplicationsystem.business.rules.abstracts.CustomerBusinessRules;
 import com.gokhankorkmaz.loanapplicationsystem.entities.Customer;
 import com.gokhankorkmaz.loanapplicationsystem.repositories.CustomerRepository;
 import com.gokhankorkmaz.loanapplicationsystem.utilities.mapping.ModelMapperService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,13 +35,12 @@ public class CustomerManager implements CustomerService {
     @Override
     public CustomerResponse add(CustomerRequest customerRequest) {
         this.customerBusinessRules.ruleForIdentityNumberIsUnique(customerRequest.getIdentityNumber());
+        CustomerAddRequest customerAddRequest = this.customerBusinessRules.ruleForCalculateCreditRating(customerRequest);
+        Customer customer = this.customerRepository.save(modelMapperService.forDto().map(customerAddRequest, Customer.class));
 
-        Customer customer = this.customerRepository.save(modelMapperService.forDto().map(customerRequest, Customer.class));
         CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);
-
         // bir customer eklenince otomatik olarak kredi notu işlemi yapılır
         this.creditService.add(CreditRequest.builder().customerId(customerResponse.getId()).build());
-
         return customerResponse;
     }
 
@@ -56,9 +56,11 @@ public class CustomerManager implements CustomerService {
         }
 
         updatedCustomer.setId(id);
+        // Güncelleme işlemi müşterinin bilgileri içindir, credit rating alanı müşterinin güncelleme isteğiyle değişime kapalıdır.
+        updatedCustomer.setCreditRating(oldCustomer.getCreditRating());
         Customer customer = this.customerRepository.save(updatedCustomer);
 
-        // bir customerın aylık geliri veya teminatı güncellenince kredi notu işlemi tekrar yapılır eski işlem tutulur
+        // bir customerın aylık geliri veya teminatı güncellenince kredi notu işlemi tekrar yapılır
         if(this.customerBusinessRules.ruleForIsMonthlyIncomeOrAssuranceChanged(oldCustomer, updatedCustomer)){
             this.creditService.add(CreditRequest.builder().customerId(id).build());
         }
@@ -68,8 +70,10 @@ public class CustomerManager implements CustomerService {
     }
 
     @Override
+    //@Transactional
     public CustomerResponse delete(int id) {
         Customer customer = this.customerBusinessRules.ruleForCustomerExist(id);
+        this.creditService.deleteByCustomerId(id);
         this.customerRepository.deleteById(id);
         CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);
         return customerResponse;

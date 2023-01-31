@@ -7,5 +7,6 @@ import java.sql.Date;
 
 public interface CreditService {
     CreditResponse add(CreditRequest creditRequest);
+    void deleteByCustomerId(int customerId);
     CreditResponse getByIdentityNumberAndBirthdate(String identityNumber, Date birthdate);
 }

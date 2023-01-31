@@ -39,21 +39,19 @@ public class CreditBusinessRulesImpl implements CreditBusinessRules {
 
     @Override
     public Credit CalculateCredit(Customer customer) {
-        // kredi skoru rastgele çalışır
-        int creditScore = this.random.nextInt() % 2000;
         int creditLimitFactor = 4;
         
         Credit credit = new Credit();
         credit.setCustomer(customer);
         
-        if(creditScore < 500){
+        if(customer.getCreditRating() < 500){
             credit.setAmount(0);
             credit.setState(false);
         }
         else {
             credit.setState(true);
 
-            if(creditScore >= 500 && creditScore <1000){
+            if(customer.getCreditRating() >= 500 && customer.getCreditRating() <1000){
 
                 if(customer.getMonthlyIncome() < 5000){
                     credit.setAmount(10000 + customer.getAssurance() * 0.1);

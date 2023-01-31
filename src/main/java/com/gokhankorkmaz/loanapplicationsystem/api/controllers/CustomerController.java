@@ -3,12 +3,12 @@ package com.gokhankorkmaz.loanapplicationsystem.api.controllers;
 import com.gokhankorkmaz.loanapplicationsystem.business.abstracts.CustomerService;
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.requests.CustomerRequest;
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.responses.CustomerResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,15 +21,15 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public CustomerResponse getById(@RequestParam int id){
+    public CustomerResponse getById(@PathVariable int id){
         return this.customerService.getById(id);
     }
 
-    @GetMapping("/getbyidentity")
+    @GetMapping("/identity/{identityNumber}")
     @ResponseStatus(value = HttpStatus.OK)
-    public CustomerResponse getByIdentityNumber(@RequestParam String identityNumber){
+    public CustomerResponse getByIdentityNumber(@PathVariable String identityNumber){
         return this.customerService.getById(identityNumber);
     }
 
@@ -41,19 +41,19 @@ public class CustomerController {
 
     @PostMapping("/add")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public CustomerResponse add(@Valid @RequestBody CustomerRequest customerRequest){
+    public CustomerResponse add(@RequestBody @Valid CustomerRequest customerRequest){
         return this.customerService.add(customerRequest);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public CustomerResponse update(@RequestParam int id, @Valid @RequestBody CustomerRequest customerRequest){
+    public CustomerResponse update(@PathVariable int id, @RequestBody @Valid CustomerRequest customerRequest){
         return this.customerService.update(id, customerRequest);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public CustomerResponse delete(@RequestParam int id){
+    public CustomerResponse delete(@PathVariable int id){
         return this.customerService.delete(id);
     }
 }

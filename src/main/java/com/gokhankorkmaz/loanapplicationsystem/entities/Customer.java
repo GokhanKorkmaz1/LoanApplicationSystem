@@ -28,10 +28,12 @@ public class Customer {
     private String surname;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @Column(name = "montly_income")
-    private double monthlyIncome;
     @Column(name = "birthdate")
     private Date birthdate;
+    @Column(name = "montly_income")
+    private double monthlyIncome;
+    @Column(name = "credit_rating")
+    private int creditRating;
     @Column(name = "assurance")
     private double assurance;
     @OneToMany(mappedBy = "customer")

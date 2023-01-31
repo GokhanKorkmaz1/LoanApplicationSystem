@@ -43,6 +43,13 @@ public class CreditManager implements CreditService {
     }
 
     @Override
+    public void deleteByCustomerId(int customerId) {
+        Customer customer = customerBusinessRules.ruleForCustomerExist(customerId);
+        Credit credit = this.creditRepository.getCreditByCustomer(customer);
+        this.creditRepository.delete(credit);
+    }
+
+    @Override
     public CreditResponse getByIdentityNumberAndBirthdate(String identityNumber, Date birthdate) {
         Customer customer = this.customerBusinessRules.ruleForCustomerExist(identityNumber);
         CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);

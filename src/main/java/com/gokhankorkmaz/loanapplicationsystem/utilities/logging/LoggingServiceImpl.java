@@ -43,7 +43,7 @@ public class LoggingServiceImpl implements LoggingService{
         }
         respMessage.append(" responseBody = [").append(body).append("]");
 
-        logger.info("logResponse: {}",respMessage);
+        logger.info("log Response: {}",respMessage);
     }
 
     private Map<String,String> getHeaders(HttpServletResponse response) {

@@ -18,5 +18,8 @@ public class CustomerResponse {
     private String identityNumber;
     private String phoneNumber;
     private Date birthdate;
+    private double monthlyIncome;
+    private int creditRating;
+    private double assurance;
 
 }
