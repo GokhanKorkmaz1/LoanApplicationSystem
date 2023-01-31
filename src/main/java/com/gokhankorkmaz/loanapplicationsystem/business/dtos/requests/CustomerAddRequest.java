@@ -6,16 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-
 import java.sql.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerRequest {
+public class CustomerAddRequest {
     @NotBlank(message = "Identity number shouldn't be null!")
     @Pattern(regexp = "^\\d+$",message = "Identity number should consist of numbers")
-    @Size (min=11, max=11, message = "Identity number length should be 11")
+    @Size(min=11, max=11, message = "Identity number length should be 11")
     private String identityNumber;
     @NotBlank(message = "Name shouldn't be null!")
     @Size (min=2, max=50, message = "Name length should be between 2 and 50 characters")
@@ -35,4 +34,7 @@ public class CustomerRequest {
     private Date birthdate;
     @Min(value = 0, message = "Assurance should be positive")
     private double assurance;
+    @NotNull(message = "Credit rating shouldn't be null!")
+    @Min(value = 0, message = "Credit rating should be positive")
+    private int creditRating;
 }
