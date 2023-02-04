@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.List;
 
 @Service
 public class CreditManager implements CreditService {
@@ -37,7 +38,7 @@ public class CreditManager implements CreditService {
     public CreditResponse add(CreditRequest creditRequest) {
         Customer customer = customerBusinessRules.ruleForCustomerExist(creditRequest.getCustomerId());
         Credit credit = this.creditBusinessRules.CalculateCredit(customer);
-        Credit creditResult = this.creditRepository.saveAndFlush(credit);
+        Credit creditResult = this.creditRepository.save(credit);
         CreditResponse creditResponse = this.modelMapperService.forDto().map(creditResult, CreditResponse.class);
         return creditResponse;
     }
@@ -45,8 +46,8 @@ public class CreditManager implements CreditService {
     @Override
     public void deleteByCustomerId(int customerId) {
         Customer customer = customerBusinessRules.ruleForCustomerExist(customerId);
-        Credit credit = this.creditRepository.getCreditByCustomer(customer);
-        this.creditRepository.delete(credit);
+        List<Credit> credits = this.creditRepository.getCreditByCustomer(customer);
+        credits.forEach(credit -> this.creditRepository.delete(credit));
     }
 
     @Override

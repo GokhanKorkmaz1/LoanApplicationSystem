@@ -9,6 +9,7 @@ import com.gokhankorkmaz.loanapplicationsystem.utilities.exceptions.BusinessExce
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -27,13 +28,18 @@ public class CreditBusinessRulesImpl implements CreditBusinessRules {
     @Override
     public Credit ruleForCreditExist(Customer customer) {
         Customer resultCustomer = this.customerBusinessRules.ruleForCustomerExist(customer.getIdentityNumber());
+
         if(customer.getIdentityNumber().compareTo(resultCustomer.getIdentityNumber()) != 0 || !customer.getBirthdate().equals(resultCustomer.getBirthdate())){
             throw new BusinessException("Credit not found due to mismatch of identity number and birthdate");
         }
-        Credit credit = this.creditRepository.getCreditByCustomer(resultCustomer);
-        if(credit == null){
+
+        List<Credit> credits = this.creditRepository.getCreditByCustomer(resultCustomer);
+        if(credits.size() == 0){
             throw new BusinessException("Credit not found");
         }
+
+        // müşterinin birden fazla kredi hesabı olabilir, yalnızca son eklenen kullanıcıya gösterilir
+        Credit credit = credits.stream().skip(credits.size()-1).findFirst().get();
         return credit;
     }
 

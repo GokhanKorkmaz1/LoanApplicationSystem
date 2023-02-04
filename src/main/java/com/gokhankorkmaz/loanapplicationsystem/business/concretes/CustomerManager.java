@@ -49,6 +49,7 @@ public class CustomerManager implements CustomerService {
 
         Customer oldCustomer = this.customerBusinessRules.ruleForCustomerExist(id);
         Customer updatedCustomer = this.modelMapperService.forDto().map(customerRequest, Customer.class);
+        Customer customer;
 
         // güncellenen kimlik numarası farklıysa sistemdeki diğer kimlik numaraları ile aynı olmamalı
         if(oldCustomer.getIdentityNumber().compareTo(updatedCustomer.getIdentityNumber()) != 0){
@@ -58,11 +59,13 @@ public class CustomerManager implements CustomerService {
         updatedCustomer.setId(id);
         // Güncelleme işlemi müşterinin bilgileri içindir, credit rating alanı müşterinin güncelleme isteğiyle değişime kapalıdır.
         updatedCustomer.setCreditRating(oldCustomer.getCreditRating());
-        Customer customer = this.customerRepository.save(updatedCustomer);
 
-        // bir customerın aylık geliri veya teminatı güncellenince kredi notu işlemi tekrar yapılır
+        // bir customerın aylık geliri veya teminatı güncellenince kredi notu işlemi tekrar yapılır, eski kayıt sistemde tutulur
         if(this.customerBusinessRules.ruleForIsMonthlyIncomeOrAssuranceChanged(oldCustomer, updatedCustomer)){
+            customer = this.customerRepository.save(updatedCustomer);
             this.creditService.add(CreditRequest.builder().customerId(id).build());
+        }else{
+            customer = this.customerRepository.save(updatedCustomer);
         }
 
         CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);

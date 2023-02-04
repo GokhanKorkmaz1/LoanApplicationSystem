@@ -23,6 +23,7 @@ public class CustomerAddRequest {
     @Size (min=2, max=50, message = "Surname length should be between 2 and 50 characters")
     private String surname;
     @NotBlank(message = "Phone number shouldn't be null!")
+    @Pattern(regexp = "^\\d+$",message = "Phone number should consist of numbers")
     @Size(min=8, max=12, message = "Phone number length should be between 8 and 12")
     private String phoneNumber;
     @NotNull(message = "Monthly income shouldn't be null!")
