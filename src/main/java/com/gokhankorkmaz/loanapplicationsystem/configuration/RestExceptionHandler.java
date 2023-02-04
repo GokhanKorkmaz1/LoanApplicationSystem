@@ -17,7 +17,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class RestExceptionHandler {
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleBusinessException(BusinessException businessException){
         return businessException.getMessage();
     }
