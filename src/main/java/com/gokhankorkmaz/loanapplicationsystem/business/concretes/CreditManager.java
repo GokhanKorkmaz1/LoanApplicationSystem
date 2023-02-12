@@ -21,15 +21,13 @@ import java.util.List;
 public class CreditManager implements CreditService {
     private final CreditRepository creditRepository;
     private final CreditBusinessRules creditBusinessRules;
-    private final CustomerRepository customerRepository;
     private final CustomerBusinessRules customerBusinessRules;
     private final ModelMapperService modelMapperService;
 
     @Autowired
-    public CreditManager(CreditRepository creditRepository, CreditBusinessRules creditBusinessRules, CustomerRepository customerRepository, CustomerBusinessRules customerBusinessRules, ModelMapperService modelMapperService) {
+    public CreditManager(CreditRepository creditRepository, CreditBusinessRules creditBusinessRules, CustomerBusinessRules customerBusinessRules, ModelMapperService modelMapperService) {
         this.creditRepository = creditRepository;
         this.creditBusinessRules = creditBusinessRules;
-        this.customerRepository = customerRepository;
         this.customerBusinessRules = customerBusinessRules;
         this.modelMapperService = modelMapperService;
     }
@@ -37,17 +35,16 @@ public class CreditManager implements CreditService {
     @Override
     public CreditResponse add(CreditRequest creditRequest) {
         Customer customer = customerBusinessRules.ruleForCustomerExist(creditRequest.getCustomerId());
-        Credit credit = this.creditBusinessRules.CalculateCredit(customer);
+        Credit credit = this.creditBusinessRules.calculateCredit(customer);
         Credit creditResult = this.creditRepository.save(credit);
-        CreditResponse creditResponse = this.modelMapperService.forDto().map(creditResult, CreditResponse.class);
-        return creditResponse;
+        return this.modelMapperService.forDto().map(creditResult, CreditResponse.class);
     }
 
     @Override
     public void deleteByCustomerId(int customerId) {
         Customer customer = customerBusinessRules.ruleForCustomerExist(customerId);
         List<Credit> credits = this.creditRepository.getCreditByCustomer(customer);
-        credits.forEach(credit -> this.creditRepository.delete(credit));
+        credits.forEach(this.creditRepository::delete);
     }
 
     @Override
@@ -55,8 +52,6 @@ public class CreditManager implements CreditService {
         Customer customer = this.customerBusinessRules.ruleForCustomerExist(identityNumber);
         CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);
         Credit credit = this.creditBusinessRules.ruleForCreditExist(Customer.builder().identityNumber(identityNumber).birthdate(birthdate).build());
-        CreditResponse creditResponse = CreditResponse.builder().customerResponse(customerResponse)
-                .id(credit.getId()).amount(credit.getAmount()).state(credit.isState()).build();
-        return creditResponse;
+        return CreditResponse.builder().customerResponse(customerResponse).id(credit.getId()).amount(credit.getAmount()).state(credit.isState()).build();
     }
 }

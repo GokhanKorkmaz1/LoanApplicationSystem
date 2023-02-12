@@ -10,12 +10,10 @@ import com.gokhankorkmaz.loanapplicationsystem.business.rules.abstracts.Customer
 import com.gokhankorkmaz.loanapplicationsystem.entities.Customer;
 import com.gokhankorkmaz.loanapplicationsystem.repositories.CustomerRepository;
 import com.gokhankorkmaz.loanapplicationsystem.utilities.mapping.ModelMapperService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerManager implements CustomerService {
@@ -68,40 +66,32 @@ public class CustomerManager implements CustomerService {
             customer = this.customerRepository.save(updatedCustomer);
         }
 
-        CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);
-        return customerResponse;
+        return this.modelMapperService.forDto().map(customer, CustomerResponse.class);
     }
 
     @Override
-    //@Transactional
     public CustomerResponse delete(int id) {
         Customer customer = this.customerBusinessRules.ruleForCustomerExist(id);
         this.creditService.deleteByCustomerId(id);
         this.customerRepository.deleteById(id);
-        CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);
-        return customerResponse;
+        return this.modelMapperService.forDto().map(customer, CustomerResponse.class);
     }
 
     @Override
     public CustomerResponse getById(int id) {
         Customer customer = this.customerBusinessRules.ruleForCustomerExist(id);
-        CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);
-        return customerResponse;
+        return this.modelMapperService.forDto().map(customer, CustomerResponse.class);
     }
 
     @Override
     public CustomerResponse getById(String identityNumber) {
         Customer customer = this.customerBusinessRules.ruleForCustomerExist(identityNumber);
-        CustomerResponse customerResponse = this.modelMapperService.forDto().map(customer, CustomerResponse.class);
-        return customerResponse;
+        return this.modelMapperService.forDto().map(customer, CustomerResponse.class);
     }
 
     @Override
     public List<CustomerResponse> getAll() {
         List<Customer> customers = this.customerRepository.findAll();
-        List<CustomerResponse> customerResponses = customers.stream().
-                map(c -> this.modelMapperService.forDto().map(c, CustomerResponse.class))
-                .collect(Collectors.toList());
-        return customerResponses;
+        return customers.stream().map(c -> this.modelMapperService.forDto().map(c, CustomerResponse.class)).toList();
     }
 }

@@ -5,7 +5,6 @@ import com.gokhankorkmaz.loanapplicationsystem.business.dtos.requests.CustomerRe
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.responses.CustomerResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

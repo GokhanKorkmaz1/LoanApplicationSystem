@@ -2,6 +2,7 @@ package com.gokhankorkmaz.loanapplicationsystem.business.dtos.requests;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,6 +13,7 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class CustomerRequest {
     @NotBlank(message = "Identity number shouldn't be null!")
     @Pattern(regexp = "^\\d+$",message = "Identity number should consist of numbers")

@@ -9,6 +9,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class CustomerResponse {
     private int id;
     private String name;

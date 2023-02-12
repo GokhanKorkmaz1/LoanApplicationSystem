@@ -10,12 +10,15 @@ import com.gokhankorkmaz.loanapplicationsystem.utilities.mapping.ModelMapperServ
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 
 @Service
 public class CustomerBusinessRulesImpl implements CustomerBusinessRules {
     private final CustomerRepository customerRepository;
     private final ModelMapperService modelMapperService;
+    private Random random = new SecureRandom();
 
     public CustomerBusinessRulesImpl(CustomerRepository customerRepository, ModelMapperService modelMapperService) {
         this.customerRepository = customerRepository;
@@ -25,11 +28,7 @@ public class CustomerBusinessRulesImpl implements CustomerBusinessRules {
     @SneakyThrows
     @Override
     public Customer ruleForCustomerExist(int id) {
-        Customer customer = this.customerRepository.getById(id);
-        if(customer == null){
-            throw new BusinessException("Customer not found");
-        }
-        return customer;
+        return this.customerRepository.getReferenceById(id);
     }
 
     @SneakyThrows
@@ -53,7 +52,6 @@ public class CustomerBusinessRulesImpl implements CustomerBusinessRules {
 
     @Override
     public CustomerAddRequest ruleForCalculateCreditRating(CustomerRequest customerRequest) {
-        Random random = new Random();
         CustomerAddRequest customerAddRequest =this.modelMapperService.forDto().map(customerRequest, CustomerAddRequest.class);
         customerAddRequest.setCreditRating(Math.abs(random.nextInt() % 4000));
         return customerAddRequest;
@@ -61,9 +59,6 @@ public class CustomerBusinessRulesImpl implements CustomerBusinessRules {
 
     @Override
     public boolean ruleForIsMonthlyIncomeOrAssuranceChanged(Customer oldCustomer, Customer newCustomer) {
-        if(oldCustomer.getMonthlyIncome() == newCustomer.getMonthlyIncome() && oldCustomer.getAssurance() == newCustomer.getAssurance()){
-            return false;
-        }
-        return true;
+        return !(oldCustomer.getMonthlyIncome() == newCustomer.getMonthlyIncome() && oldCustomer.getAssurance() == newCustomer.getAssurance());
     }
 }

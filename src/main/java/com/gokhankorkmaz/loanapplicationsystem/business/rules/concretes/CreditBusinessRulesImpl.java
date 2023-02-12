@@ -10,18 +10,16 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
+import java.util.Optional;
 
 @Service
 public class CreditBusinessRulesImpl implements CreditBusinessRules {
     private final CustomerBusinessRules customerBusinessRules;
     private final CreditRepository creditRepository;
-    private final Random random;
 
     public CreditBusinessRulesImpl(CustomerBusinessRules customerBusinessRules, CreditRepository creditRepository) {
         this.customerBusinessRules = customerBusinessRules;
         this.creditRepository = creditRepository;
-        this.random = new Random();
     }
 
     @SneakyThrows
@@ -34,17 +32,19 @@ public class CreditBusinessRulesImpl implements CreditBusinessRules {
         }
 
         List<Credit> credits = this.creditRepository.getCreditByCustomer(resultCustomer);
-        if(credits.size() == 0){
+        if(credits.isEmpty()){
             throw new BusinessException("Credit not found");
         }
-
         // müşterinin birden fazla kredi hesabı olabilir, yalnızca son eklenen kullanıcıya gösterilir
-        Credit credit = credits.stream().skip(credits.size()-1).findFirst().get();
-        return credit;
+        Optional<Credit> optionalCredit = credits.stream().skip(credits.size()-1L).findFirst();
+        if(optionalCredit.isEmpty()){
+            throw new BusinessException("Credit not found");
+        }
+        return optionalCredit.get();
     }
 
     @Override
-    public Credit CalculateCredit(Customer customer) {
+    public Credit calculateCredit(Customer customer) {
         int creditLimitFactor = 4;
         
         Credit credit = new Credit();

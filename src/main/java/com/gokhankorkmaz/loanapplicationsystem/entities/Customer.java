@@ -36,6 +36,6 @@ public class Customer {
     private int creditRating;
     @Column(name = "assurance")
     private double assurance;
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer")
     private List<Credit> credits;
 }
