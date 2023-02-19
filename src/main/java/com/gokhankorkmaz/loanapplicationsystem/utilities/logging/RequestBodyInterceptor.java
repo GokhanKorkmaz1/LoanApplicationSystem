@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
 @ControllerAdvice
 public class RequestBodyInterceptor extends RequestBodyAdviceAdapter {
 
-    @Autowired
+    @Autowired(required = false)
     LoggingService logService;
 
     @Autowired

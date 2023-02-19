@@ -10,6 +10,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @ToString
 @Builder
+@EqualsAndHashCode
 public class CustomerResponse {
     private int id;
     private String name;

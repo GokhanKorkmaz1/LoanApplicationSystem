@@ -1,4 +1,4 @@
-package com.gokhankorkmaz.loanapplicationsystem.api.controllers;
+package com.gokhankorkmaz.loanapplicationsystem.controllers;
 
 import com.gokhankorkmaz.loanapplicationsystem.business.concretes.CreditManager;
 import com.gokhankorkmaz.loanapplicationsystem.business.dtos.responses.CreditResponse;

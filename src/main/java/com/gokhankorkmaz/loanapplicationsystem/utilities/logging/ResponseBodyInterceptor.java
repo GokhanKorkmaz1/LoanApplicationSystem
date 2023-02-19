@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 @ControllerAdvice
 public class ResponseBodyInterceptor implements ResponseBodyAdvice<Object> {
-    @Autowired
+    @Autowired(required = false)
     LoggingService loggingService;
 
     @Override
