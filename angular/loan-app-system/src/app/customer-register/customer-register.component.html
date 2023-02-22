@@ -1,0 +1,83 @@
+
+  <div class=" d-flex justify-content-end">
+    <div class="card col-md-6 mx-5 my-3">
+      <div class="card-body">
+        <h3 class="text-end mx-4 mt-2"><i class="fa-thin fa-address-card"></i>Kayıt Ol</h3>
+        <form [formGroup]="customerRegisterForm" (ngSubmit)="addCustomer()" class="form-group">
+          <div class="row d-flex justify-content-between mx-2">
+            <div class="col-md-5 col-12 flex-item">
+              <label class="mb-1" for="name">Adınız</label>
+              <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="John">
+              <div class="alert form-alert"
+                *ngIf="customerRegisterForm.get('name')?.hasError('required') && customerRegisterForm.get('name')?.dirty">
+                Müşteri Adı Zorunludur</div>
+            </div>
+
+            <div class="col-md-6 col-12 flex-item">
+              <label class="mb-1" for="surname">Soyadınız</label>
+              <input type="text" id="surname" name="surname" formControlName="surname" class="form-control"
+                placeholder="Doe">
+              <div class="alert form-alert"
+                *ngIf="customerRegisterForm.get('surname')?.hasError('required') && customerRegisterForm.get('surname')?.dirty">
+                Müşteri Soyadı Zorunludur</div>
+            </div>
+          </div>
+
+          <div class="row d-flex justify-content-between m-2">
+            
+            <div class="col-md-6 col-12 flex-item">
+              <label class="m-1" for="identityNumber">Kimlik Numaranız</label>
+              <input type="text" id="identityNumber" name="identityNumber" formControlName="identityNumber"
+                class="form-control" placeholder="12345678901"
+                oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+              <div class="alert form-alert"
+                *ngIf="customerRegisterForm.get('identityNumber')?.hasError('required') && customerRegisterForm.get('identityNumber')?.dirty">
+                Kimlik Numarası Zorunludur</div>
+            </div>
+
+            <div class="col-md-5 col-12 flex-item">
+              <label class="m-1" for="phoneNumber">Telefon Numaranız</label>
+              <input type="text" id="phoneNumber" name="phoneNumber" formControlName="phoneNumber" class="form-control"
+                placeholder="(555) 555-5555" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+              <div class="alert form-alert"
+                *ngIf="customerRegisterForm.get('phoneNumber')?.hasError('required') && customerRegisterForm.get('phoneNumber')?.dirty">
+                Telefon Numaranız Zorunludur</div>
+            </div>
+          </div>
+
+          <div class="row d-flex justify-content-between m-2">
+            
+            <div class="col-md-4 col-12 flex-item">
+              <label class="m-1" for="birthdate">Doğum Tarihi</label>
+              <input type="date" id="birthdate" name="birthdate" formControlName="birthdate"
+                class="form-control" >
+              <div class="alert form-alert"
+                *ngIf="customerRegisterForm.get('birthdate')?.hasError('required') && customerRegisterForm.get('birthdate')?.dirty">
+                Doğum Tarihi Zorunludur</div>
+            </div>
+
+            <div class="col-md-7 col-12 flex-item">
+              <label class="m-1" for="monthlyIncome">Aylık Gelir</label>
+              <input type="text" id="monthlyIncome" name="monthlyIncome" formControlName="monthlyIncome" class="form-control"
+                placeholder="17.422.00&#8378;" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+              <div class="alert form-alert"
+                *ngIf="customerRegisterForm.get('monthlyIncome')?.hasError('required') && customerRegisterForm.get('monthlyIncome')?.dirty">
+                Aylık Gelir Bilgisi Zorunludur</div>
+            </div>
+          </div>
+
+          <div class="row d-flex justify-content-between m-2">
+            <div class="col-md-9 col-12 flex-item">
+              <label class="m-1" for="assurance">Teminat Miktarı</label>
+              <input type="text" id="assurance" name="assurance" formControlName="assurance" class="form-control"
+                placeholder="128.422.00&#8378;" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+            </div>
+          </div>
+          <div class="row mx-3 mt-3">
+              <button type="submit" class="btn btn-dark btn-lg btn-block m-1">KAYIT OL</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
