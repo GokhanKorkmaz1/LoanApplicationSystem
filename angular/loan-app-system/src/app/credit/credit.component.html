@@ -1,3 +1,119 @@
-<p>
-  credit works!
-</p>
+<div class="container mt-3">
+  <div class="row d-flex justify-content-end">
+    <div *ngIf="creditResponse?.id" class="col-md-7 rounded">
+      <div class="row d-flex justify-content-between mt-4">
+        <h3>Kredi Bilgileri</h3>
+        <hr>
+        <div class="col-md-5 col-12">
+          <label class="m-1 fw-bold" for="amount">Kredi Tutarı</label>
+          <div type="text" id="amount" name="amount" class="form-control">{{creditResponse.amount | number
+            :'1.2-2'}}&#8378;</div>
+        </div>
+        <div class="col-md-6 col-12">
+          <div *ngIf="creditResponse.state == true" type="text" id="amount" name="amount"
+            class="badge bg-success w-100 h-75 text-center fs-5 text-wrap mt-4 shadow-lg" style="line-height: 2rem;">
+            Kredi Başvurunuz Onaylandı</div>
+          <div *ngIf="creditResponse.state == false" type="text" id="amount" name="amount"
+            class="badge bg-danger w-100 h-75 text-center fs-5 text-wrap mt-4 shadow-lg" style="line-height: 2rem;">
+            Kredi Başvurunuz Reddedildi</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-5 float-right">
+      <div class="card col-md-12 mx-5 my-3">
+        <div class="card-body">
+          <h3 class="text-end mx-4 mt-2"><i class="fa fa-search" aria-hidden="true"></i> Kredi Sorgu Ekranı</h3>
+          <form [formGroup]="creditForm" (ngSubmit)="findCredit()" class="form-group">
+
+            <div class="row d-flex justify-content-between m-2">
+
+              <div class="col-md-6 col-12 flex-item">
+                <label class="m-1" for="identityNumber">Kimlik Numaranız</label>
+                <input type="text" id="identityNumber" name="identityNumber" formControlName="identityNumber"
+                  class="form-control" placeholder="12345678901" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                <div class="alert form-alert"
+                  *ngIf="creditForm.get('identityNumber')?.hasError('required') && creditForm.get('identityNumber')?.dirty">
+                  Kimlik Numarası Zorunludur</div>
+              </div>
+              <div class="col-md-5 col-12 flex-item">
+                <label class="m-1" for="birthdate">Doğum Tarihi</label>
+                <input type="date" id="birthdate" name="birthdate" formControlName="birthdate" class="form-control">
+                <div class="alert form-alert"
+                  *ngIf="creditForm.get('birthdate')?.hasError('required') && creditForm.get('birthdate')?.dirty">
+                  Doğum Tarihi Zorunludur</div>
+              </div>
+            </div>
+
+            <div class="row mx-3 mt-3">
+              <button type="submit" class="btn btn-dark btn-lg btn-block m-1">KREDİ SORGULA</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div *ngIf="creditResponse?.customerResponse" class="row d-flex justify-content-between mt-2">
+    <h3>Müşteri Bilgileri</h3>
+    <hr>
+    <div class="col-md-7">
+      <div class="row mt-2">
+        <div class="col-md-6 col-12">
+          <label class="m-1 fw-bold" for="name">Ad</label>
+          <div type="text" id="name" name="name" class="form-control">{{creditResponse.customerResponse.name}}</div>
+        </div>
+        <div class="col-md-6 col-12">
+          <label class="m-1 fw-bold" for="surname">Soyad</label>
+          <div type="text" id="surname" name="surname" class="form-control">{{creditResponse.customerResponse.surname}}</div>
+        </div>
+      </div>
+      <div class="row mt-2">
+        <div class="col-md-4 col-12">
+          <label class="m-1 fw-bold" for="identityNumber">Kimlik Numarası</label>
+          <div type="text" id="identityNumber" name="identityNumber" class="form-control">
+            {{creditResponse.customerResponse.identityNumber}}</div>
+        </div>
+        <div class="col-md-4 col-6">
+          <label class="m-1 fw-bold" for="birthdate">Doğum Tarihi</label>
+          <div type="text" id="birthdate" name="birthdate" class="form-control">
+            {{creditResponse.customerResponse.birthdate | date : "dd.MM.yyyy"}}</div>
+        </div>
+        <div class="col-md-4 col-6">
+          <label class="m-1 fw-bold" for="phoneNumber">Telefon Numarası</label>
+          <div type="text" id="phoneNumber" name="phoneNumber" class="form-control">
+            {{creditResponse.customerResponse.phoneNumber}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="row mt-2 d-flex justify-content-between">
+        <div class="col-md-8">
+          <label class="m-1 fw-bold" for="monthlyIncome">Aylık Gelir</label>
+          <div type="text" id="monthlyIncome" name="monthlyIncome" class="form-control">
+            {{creditResponse.customerResponse.monthlyIncome | number : '1.2-2'}}&#8378;</div>
+        </div>
+        <div class="col-md-4">
+          <label class="m-1 fw-bold" for="creditRating">Kredi Notu</label>
+          <div *ngIf="creditResponse.customerResponse.creditRating < 500" type="text" id="creditRating" name="creditRating"
+            class="badge bg-danger w-75 h-50 fs-5 text-wrap"> {{creditResponse.customerResponse.creditRating}}</div>
+            <div *ngIf="creditResponse.customerResponse.creditRating >= 500 && creditResponse.customerResponse.creditRating <1000" 
+              type="text" id="creditRating" name="creditRating"
+            class="badge bg-warning w-100 h-50 fs-5 text-wrap"> {{creditResponse.customerResponse.creditRating}}</div>
+            <div *ngIf="creditResponse.customerResponse.creditRating >= 1000" type="text" id="creditRating" name="creditRating"
+            class="badge bg-info w-75 h-50 fs-5 text-wrap"> {{creditResponse.customerResponse.creditRating}}</div>
+        </div>
+      </div>
+      <div *ngIf="creditResponse?.customerResponse?.assurance" class="row mt-2">
+        <div class="col-md-12">
+          <label class="m-1 fw-bold" for="assurance">Teminat</label>
+          <div type="text" id="assurance" name="assurance" class="form-control">
+            {{creditResponse.customerResponse.assurance  | number:'1.2-2'}}&#8378;</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

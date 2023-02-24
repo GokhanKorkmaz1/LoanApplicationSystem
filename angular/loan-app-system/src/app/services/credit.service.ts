@@ -18,7 +18,7 @@ export class CreditService {
     return this.httpClient.post<T>(this.apiPath + functionName, param);
   }
 
-  getCredit = (identityNumber: number, birthdate: Date): Observable<CreditResponse> =>
+  getCredit = (identityNumber: string, birthdate: string): Observable<CreditResponse> =>
     this.getHttp("?identityNumber=" + identityNumber + "&birthdate=" + birthdate);
 
 }

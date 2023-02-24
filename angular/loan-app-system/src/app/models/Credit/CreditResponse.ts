@@ -6,5 +6,5 @@ export class CreditResponse {
     amount:number;
     customerId:number;
     
-    customer:CustomerResponse;
+    customerResponse:CustomerResponse;
 }
