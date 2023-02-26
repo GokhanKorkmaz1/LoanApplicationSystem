@@ -66,7 +66,8 @@
         </div>
         <div class="col-md-6 col-12">
           <label class="m-1 fw-bold" for="surname">Soyad</label>
-          <div type="text" id="surname" name="surname" class="form-control">{{creditResponse.customerResponse.surname}}</div>
+          <div type="text" id="surname" name="surname" class="form-control">{{creditResponse.customerResponse.surname}}
+          </div>
         </div>
       </div>
       <div class="row mt-2">
@@ -97,20 +98,23 @@
         </div>
         <div class="col-md-4">
           <label class="m-1 fw-bold" for="creditRating">Kredi Notu</label>
-          <div *ngIf="creditResponse.customerResponse.creditRating < 500" type="text" id="creditRating" name="creditRating"
-            class="badge bg-danger w-75 h-50 fs-5 text-wrap"> {{creditResponse.customerResponse.creditRating}}</div>
-            <div *ngIf="creditResponse.customerResponse.creditRating >= 500 && creditResponse.customerResponse.creditRating <1000" 
-              type="text" id="creditRating" name="creditRating"
-            class="badge bg-warning w-100 h-50 fs-5 text-wrap"> {{creditResponse.customerResponse.creditRating}}</div>
-            <div *ngIf="creditResponse.customerResponse.creditRating >= 1000" type="text" id="creditRating" name="creditRating"
-            class="badge bg-info w-75 h-50 fs-5 text-wrap"> {{creditResponse.customerResponse.creditRating}}</div>
+          <div *ngIf="creditResponse.customerResponse.creditRating < 500" type="text" id="creditRating"
+            name="creditRating" class="badge bg-danger w-75 h-50 fs-5 text-wrap">
+            {{creditResponse.customerResponse.creditRating}}</div>
+          <div
+            *ngIf="creditResponse.customerResponse.creditRating >= 500 && creditResponse.customerResponse.creditRating <1000"
+            type="text" id="creditRating" name="creditRating" class="badge bg-warning w-100 h-50 fs-5 text-wrap">
+            {{creditResponse.customerResponse.creditRating}}</div>
+          <div *ngIf="creditResponse.customerResponse.creditRating >= 1000" type="text" id="creditRating"
+            name="creditRating" class="badge bg-info w-75 h-50 fs-5 text-wrap">
+            {{creditResponse.customerResponse.creditRating}}</div>
         </div>
       </div>
       <div *ngIf="creditResponse?.customerResponse?.assurance" class="row mt-2">
         <div class="col-md-12">
           <label class="m-1 fw-bold" for="assurance">Teminat</label>
           <div type="text" id="assurance" name="assurance" class="form-control">
-            {{creditResponse.customerResponse.assurance  | number:'1.2-2'}}&#8378;</div>
+            {{creditResponse.customerResponse.assurance | number:'1.2-2'}}&#8378;</div>
         </div>
       </div>
     </div>

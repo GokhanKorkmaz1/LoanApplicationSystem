@@ -68,7 +68,7 @@
             <div class="alert form-alert"
               *ngIf="customerRegisterForm.get('monthlyIncome')?.hasError('required') && customerRegisterForm.get('monthlyIncome')?.dirty">
               Aylık Gelir Bilgisi Gerekli</div>
-              <div class="alert form-alert"
+            <div class="alert form-alert"
               *ngIf="customerRegisterForm.get('monthlyIncome')?.hasError('min') && customerRegisterForm.get('monthlyIncome')?.dirty">
               Aylık Gelir Pozitif Olmalı</div>
           </div>
@@ -79,7 +79,7 @@
             <label class="m-1" for="assurance">Teminat Miktarı</label>
             <input type="text" id="assurance" name="assurance" formControlName="assurance" class="form-control"
               placeholder="128.422.00&#8378;" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-              <div class="alert form-alert"
+            <div class="alert form-alert"
               *ngIf="customerRegisterForm.get('assurance')?.hasError('min') && customerRegisterForm.get('assurance')?.dirty">
               Teminat Pozitif Olmalı</div>
           </div>
