@@ -9,7 +9,7 @@
             <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="John">
             <div class="alert form-alert"
               *ngIf="customerRegisterForm.get('name')?.hasError('required') && customerRegisterForm.get('name')?.dirty">
-              Müşteri Adı Zorunludur</div>
+              Müşteri Adı Gerekli</div>
           </div>
 
           <div class="col-md-6 col-12 flex-item">
@@ -18,7 +18,7 @@
               placeholder="Doe">
             <div class="alert form-alert"
               *ngIf="customerRegisterForm.get('surname')?.hasError('required') && customerRegisterForm.get('surname')?.dirty">
-              Müşteri Soyadı Zorunludur</div>
+              Müşteri Soyadı Gerekli</div>
           </div>
         </div>
 
@@ -30,7 +30,7 @@
               class="form-control" placeholder="12345678901" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
             <div class="alert form-alert" *ngIf="customerRegisterForm.get('identityNumber')?.hasError('required') && 
                 customerRegisterForm.get('identityNumber')?.dirty">
-              Kimlik Numarası Zorunludur</div>
+              Kimlik Numarası Gerekli</div>
             <div class="alert form-alert" *ngIf="(customerRegisterForm.get('identityNumber')?.hasError('maxlength') || 
                        customerRegisterForm.get('identityNumber')?.hasError('minlength')) && 
                        customerRegisterForm.get('identityNumber')?.touched">
@@ -43,7 +43,7 @@
               placeholder="(555) 555-5555" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
             <div class="alert form-alert"
               *ngIf="customerRegisterForm.get('phoneNumber')?.hasError('required') && customerRegisterForm.get('phoneNumber')?.dirty">
-              Telefon Numaranız Zorunludur</div>
+              Telefon Numaranız Gerekli</div>
             <div class="alert form-alert" *ngIf="(customerRegisterForm.get('phoneNumber')?.hasError('maxlength') || 
                        customerRegisterForm.get('phoneNumber')?.hasError('minlength')) && 
                        customerRegisterForm.get('phoneNumber')?.touched">
@@ -58,7 +58,7 @@
             <input type="date" id="birthdate" name="birthdate" formControlName="birthdate" class="form-control">
             <div class="alert form-alert"
               *ngIf="customerRegisterForm.get('birthdate')?.hasError('required') && customerRegisterForm.get('birthdate')?.dirty">
-              Doğum Tarihi Zorunludur</div>
+              Doğum Tarihi Gerekli</div>
           </div>
 
           <div class="col-md-7 col-12 flex-item">
@@ -67,7 +67,7 @@
               class="form-control" placeholder="17.422.00&#8378;" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
             <div class="alert form-alert"
               *ngIf="customerRegisterForm.get('monthlyIncome')?.hasError('required') && customerRegisterForm.get('monthlyIncome')?.dirty">
-              Aylık Gelir Bilgisi Zorunludur</div>
+              Aylık Gelir Bilgisi Gerekli</div>
               <div class="alert form-alert"
               *ngIf="customerRegisterForm.get('monthlyIncome')?.hasError('min') && customerRegisterForm.get('monthlyIncome')?.dirty">
               Aylık Gelir Pozitif Olmalı</div>

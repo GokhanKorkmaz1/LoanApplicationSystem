@@ -1,20 +1,19 @@
-import { DecimalPipe } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { CustomerRequest } from '../models/Customer/CustomerRequest';
 import { CustomerResponse } from '../models/Customer/CustomerResponse';
+import { AlertifyService } from '../services/alertify.service';
 import { CustomerService } from '../services/customer.service';
-declare let alertify:any;
 
 @Component({
   selector: 'app-customer-register',
   templateUrl: './customer-register.component.html',
   styleUrls: ['./customer-register.component.css']
 })
-export class CustomerRegisterComponent implements OnInit, OnDestroy {
+export class CustomerRegisterComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private customerService: CustomerService) { }
+  constructor(private formBuilder: FormBuilder, private customerService: CustomerService, private alertifyService: AlertifyService) { }
 
   customerRegisterForm: FormGroup;
   customerRequest: CustomerRequest = new CustomerRequest();
@@ -23,7 +22,6 @@ export class CustomerRegisterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.createCustomerRegisterForm();
-    alertify.success("Kayıt İşleminiz Başarıyla Tamamlandı");
   }
 
   createCustomerRegisterForm = () => {
@@ -42,15 +40,16 @@ export class CustomerRegisterComponent implements OnInit, OnDestroy {
     if (this.customerRegisterForm.valid) {
       this.customerRequest = Object.assign({}, this.customerRegisterForm.value);
 
-      this.customerAddSubs = this.customerService.saveCustomer(this.customerRequest).subscribe(data => {
+      this.customerAddSubs = this.customerService.saveCustomer(this.customerRequest).pipe(take(1)).subscribe(data => {
         this.customerResponse = data;
-        alertify.success("Kayıt İşleminiz Başarıyla Tamamlandı");
-      } ,err => console.log(err.error));
+        this.alertifyService.success("Kayıt İşleminiz Başarıyla Tamamlandı");
+      }, err => {
+        err.error == "Identity number already registered in the system" ?
+          this.alertifyService.warning("Bu Kimlik Numarası Sistemde Kayıtlı!") :
+          this.alertifyService.warning(err.error);
+      });
     }
-  }
-
-  ngOnDestroy(): void {
-    // this.customerAddSubs.unsubscribe();
+    else Object.keys(this.customerRegisterForm.controls).forEach(key => this.customerRegisterForm.controls[key].markAsDirty());
   }
 
 }

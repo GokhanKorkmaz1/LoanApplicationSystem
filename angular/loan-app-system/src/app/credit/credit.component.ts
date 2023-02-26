@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { take } from 'rxjs';
 import { CreditResponse } from '../models/Credit/CreditResponse';
-import { CustomerResponse } from '../models/Customer/CustomerResponse';
+import { AlertifyService } from '../services/alertify.service';
 import { CreditService } from '../services/credit.service';
-declare let alertify: any;
 
 @Component({
   selector: 'app-credit',
@@ -12,7 +12,7 @@ declare let alertify: any;
 })
 export class CreditComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder, private creditService: CreditService) { }
+  constructor(private formBuilder: FormBuilder, private creditService: CreditService, private alertifyService: AlertifyService) { }
   creditForm: FormGroup;
   identityNumber: string;
   birthdate: string;
@@ -32,11 +32,12 @@ export class CreditComponent implements OnInit {
   findCredit = () => {
     if (this.creditForm.valid) {
       this.readValuesFromForm();
-      this.creditService.getCredit(this.identityNumber, this.birthdate).subscribe
-        (data => this.creditResponse = data, err => console.log(err.error));
-    } else {
-      alertify.warning("Lütfen gerekli bilgileri giriniz");
-    }
+      this.creditService.getCredit(this.identityNumber, this.birthdate).pipe(take(1)).subscribe(data =>
+        this.creditResponse = data, err => {
+          this.alertifyService.error("Müşteri Bulunamadı!");
+          console.error(err.error);
+        });
+    } else Object.keys(this.creditForm.controls).forEach(key => this.creditForm.controls[key].markAsDirty());
   }
 
   readValuesFromForm = () => {

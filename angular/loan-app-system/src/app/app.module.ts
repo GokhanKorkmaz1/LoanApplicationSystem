@@ -14,6 +14,7 @@ import { appRoutes } from './routes';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AlertifyService } from './services/alertify.service';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
   ],
   providers: [],
-  bootstrap: [AppComponent, CommonModule, CreditService, CustomerService]
+  bootstrap: [AppComponent, CommonModule, CreditService, CustomerService, AlertifyService]
 })
 export class AppModule { }

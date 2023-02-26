@@ -32,16 +32,16 @@
                 <label class="m-1" for="identityNumber">Kimlik Numaranız</label>
                 <input type="text" id="identityNumber" name="identityNumber" formControlName="identityNumber"
                   class="form-control" placeholder="12345678901" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-                <div class="alert form-alert"
+                <div class="alert text wrap form-alert"
                   *ngIf="creditForm.get('identityNumber')?.hasError('required') && creditForm.get('identityNumber')?.dirty">
-                  Kimlik Numarası Zorunludur</div>
+                  Kimlik Numarası Gerekli</div>
               </div>
               <div class="col-md-5 col-12 flex-item">
                 <label class="m-1" for="birthdate">Doğum Tarihi</label>
                 <input type="date" id="birthdate" name="birthdate" formControlName="birthdate" class="form-control">
                 <div class="alert form-alert"
                   *ngIf="creditForm.get('birthdate')?.hasError('required') && creditForm.get('birthdate')?.dirty">
-                  Doğum Tarihi Zorunludur</div>
+                  Doğum Yılı Gerekli</div>
               </div>
             </div>
 
