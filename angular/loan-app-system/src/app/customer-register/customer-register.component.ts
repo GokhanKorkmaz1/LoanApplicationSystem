@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription, take } from 'rxjs';
+import { take } from 'rxjs';
 import { CustomerRequest } from '../models/Customer/CustomerRequest';
 import { CustomerResponse } from '../models/Customer/CustomerResponse';
 import { AlertifyService } from '../services/alertify.service';
@@ -18,7 +18,6 @@ export class CustomerRegisterComponent implements OnInit {
   customerRegisterForm: FormGroup;
   customerRequest: CustomerRequest = new CustomerRequest();
   customerResponse: CustomerResponse;
-  customerAddSubs: Subscription;
 
   ngOnInit() {
     this.createCustomerRegisterForm();
@@ -40,7 +39,7 @@ export class CustomerRegisterComponent implements OnInit {
     if (this.customerRegisterForm.valid) {
       this.customerRequest = Object.assign({}, this.customerRegisterForm.value);
 
-      this.customerAddSubs = this.customerService.saveCustomer(this.customerRequest).pipe(take(1)).subscribe(data => {
+      this.customerService.saveCustomer(this.customerRequest).pipe(take(1)).subscribe(data => {
         this.customerResponse = data;
         this.alertifyService.success("Kayıt İşleminiz Başarıyla Tamamlandı");
       }, err => {
