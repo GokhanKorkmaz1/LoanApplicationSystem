@@ -95,6 +95,10 @@ loglanmakta.
 Servisin loglama işlemine benzer, merkezi bir hata ayıklama özelliği de bulunmakta. 
 Hata işlemleri de tıpkı istek ve cevaplar gibi loglanmakta.
 
+## 2.5 Test
+Servisin iş ve veri erişim katmanı tüm senaryolara karşı unit testlerle desteklendi. 
+Testler için Junit 5, mockito ve h2database kullanıldı.
+
 ## 3 Sunum
 Bir SPA olan Angular kullanılarak geliştirildi. Angular'ın 14. versiyonunun yanında, 
 angular ile çalışmanın gerekliliği olarak typescript, html, css gibi web geliştirme 
