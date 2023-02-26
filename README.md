@@ -87,6 +87,14 @@ Görsel 4
 
 Görsel 3'te bulunan açıklar yine Sonarqube önerileri kullanılarak giderildi.
 
+## 2.3 Loglama
+Servise yapılan her istek ve servisin cevabı dosya ve konsola detaylı bir şekilde
+loglanmakta.
+
+## 2.4 Hata Ayıklama
+Servisin loglama işlemine benzer, merkezi bir hata ayıklama özelliği de bulunmakta. 
+Hata işlemleri de tıpkı istek ve cevaplar gibi loglanmakta.
+
 ## 3 Sunum
 Bir SPA olan Angular kullanılarak geliştirildi. Angular'ın 14. versiyonunun yanında, 
 angular ile çalışmanın gerekliliği olarak typescript, html, css gibi web geliştirme 
